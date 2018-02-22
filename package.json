@@ -1,0 +1,27 @@
+{
+  "name": "fetchify",
+  "version": "1.0.0",
+  "description": "An awesome app",
+  "main": "index.html",
+  "dependencies": {
+    "d3": "^4.13.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VioKeyTae/fetchify.git"
+  },
+  "keywords": [
+    "fetch",
+    "stuff"
+  ],
+  "author": "HOL-HAL-GIE",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/VioKeyTae/fetchify/issues"
+  },
+  "homepage": "https://github.com/VioKeyTae/fetchify#readme"
+}
