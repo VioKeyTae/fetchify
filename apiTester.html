@@ -1,67 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>ApiTester</title>
+  <meta charset="UTF-8">
+  <title>ApiTester</title>
 </head>
+
 <body>
 
-    <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="scripts/ApiRequester.js"></script>
+  <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="scripts/ApiRequester.js"></script>
 
-    <script type="text/javascript">
+  <script type="text/javascript">
+    let apiRequester = new ApiRequester("https://api.spotify.com", "BQCn4353eromGh9ViND4vK2P4ni9tykNqJkTyXFzTxRS2tQdZTX0nKNqVNsyCMhktDJUVte2OCVoBeZyQayvlzNJANgO7G4_BO79IcuRsvBD7Dgzr8Zn66HSvyz0KpemSmcT2mN0nwyWSUDzeAWdQveLJVwaaOzTyA2akviKVg");
+    /*apiRequester.getArtist("Bebe", function(data) {
+      //console.log(data);
+    });
 
-        let apiRequester = new ApiRequester("https://api.spotify.com", "BQDvjM--SH-dBwO8wn3hwlO4N7tHRBQsQL1EhsiASPHP7aVTT2CuDAAyqXmZaPX_6E-qJsVZRxpZDAixtkXsbidY4ZDzpBdiQ58dMZKES8chy8ZQqmN59mp-N4_jP9Pr8sr4EEga2bOhsLeM1aq-ODmOVIs11tN6ZhnLK-P9HQ");
-        apiRequester.getArtist("Bebe", function (data) {
-            //console.log(data);
-        });
+    apiRequester.getTopTracks("64M6ah0SkkRsnPGtGiRAbb", function(data) {
+      //console.log(data);
+    });
 
-        apiRequester.getTopTracks("64M6ah0SkkRsnPGtGiRAbb", function (data) {
-            //console.log(data);
-        });
+    apiRequester.getSongData("7iDa6hUg2VgEL1o1HjmfBn", function(data) {
+      //console.log(data);
+    })
+    */
+  </script>
+  <div class="search">
+    <input type="text" id="artistsearch" class="artistsearch" placeholer="type Artist here">
 
-        apiRequester.getSong("7iDa6hUg2VgEL1o1HjmfBn", function (data) {
-            //console.log(data);
-        })
+  </div>
 
-    </script>
-    <div class="search">
-      <input type="text" id="artistsearch" class="artistsearch" placeholer="type Artist here">
-
-    </div>
-
-    <div class="preview">
-      <audio controls="controls">
-      <source src="http://translate.google.com/translate_tts?tl=en&q=Hello%2C+World" type="audio/mpeg">
-      </audio>
-    </div>
-    <div class="data">
-      DATASTUFF
-    </div>
+  <div class="preview">
+    <video id="audio" controls="" name="media">
+      <source id="preview_source" src="" type="audio/mpeg">
+    </video>
+  </div>
+  <div class="data">
+    DATASTUFF
+  </div>
 
 
 
 </body>
 <script type="text/javascript">
-let searchstring = "";
-let timer;
-let data;
-document.getElementById('artistsearch').addEventListener('input',function(e){
-  clearTimeout(timer);
-  timer = setTimeout(()=>{
-      console.log("change");
-      searchstring = this.value;
-      console.log(searchstring);
-      apiRequester.getArtist(searchstring,function(data){
+  let searchstring = "";
+  let timer;
+  let data;
+
+  document.getElementById('artistsearch').addEventListener('input', function(e) {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      getArtistData(this.value);
+    }, 1000);
+  });
+
+  function getArtistData(val) {
+    searchstring = val;
+    apiRequester.getArtist(searchstring, function(data) {
       this.data = data;
+      let artist;
       this.data.artists.items.forEach(function(item) {
-          console.log(item.name);
-          document.body.append(item.name+"\n");
-      });
-
+        console.log(item.name);
+        document.body.append(item.name + "\n");
 
       });
-   }, 1000);
-})
+      artist = this.data.artists.items[0].id;
+      getTopTracksData(artist)
+    });
+  }
+
+  function getTopTracksData(id) {
+    apiRequester.getTopTracks(id, function(data) {
+      document.querySelector('#preview_source').src = data.preview_url;
+      let audio = document.querySelector('#audio');
+      audio.load();
+      console.log(data.preview_url);
+    });
+  }
 </script>
+
 </html>
