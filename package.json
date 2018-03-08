@@ -1,40 +1,23 @@
 {
-<<<<<<< HEAD
-  "author": "Spotify",
-  "name": "web-api-auth-examples",
-  "description": "Basic examples of the Spotify authorization flows through OAuth 2",
-  "version": "0.0.2",
-  "dependencies": {
-    "cookie-parser": "1.3.2",
-    "express": "~4.16.0",
-    "querystring": "~0.2.0",
-    "request": "~2.83.0"
-  }
-=======
   "name": "fetchify",
   "version": "1.0.0",
-  "description": "An awesome app",
-  "main": "index.html",
+  "description": "Fetchify",
   "dependencies": {
-    "d3": "^4.13.0"
+    "jquery": "^3.3.1"
   },
   "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/VioKeyTae/fetchify.git"
   },
   "keywords": [
-    "fetch",
-    "stuff"
+    "Fetchify",
+    "Spotify",
+    "API",
+    "D3"
   ],
-  "author": "HOL-HAL-GIE",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/VioKeyTae/fetchify/issues"
-  },
+  "author": "HOL | HAL | GIE",
+  "license": "ISC",
   "homepage": "https://github.com/VioKeyTae/fetchify#readme"
->>>>>>> 208b3f9f35807c92cd32ab9909baeaa378e22cab
 }

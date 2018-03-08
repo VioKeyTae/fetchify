@@ -1,5 +1,4 @@
-/node_modules
-
-\.idea/
-
+/.idea/
 fetchify\.iml
+/node_modules/
+/authorization_code/node_modules/
