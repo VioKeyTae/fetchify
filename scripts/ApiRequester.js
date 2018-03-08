@@ -5,26 +5,26 @@ class ApiRequester {
         this.apiToken = apiToken;
     }
 
-    getArtist = function(artist, cb) {
+    getArtist(artist, cb) {
         this.sendRequest("/v1/search", {
             q: artist,
             type: "artist"
         }, cb);
-    };
+    }
 
-    getTopTracks = function(artistId, cb) {
+    getTopTracks(artistId, cb) {
         this.sendRequest("/v1/artists/" + artistId + "/top-tracks", {
             country: "AT"
         }, function (data) {
             cb(data.tracks[0]);
         });
-    };
+    }
 
-    getSong = function(id, cb) {
+    getSong(id, cb) {
         this.sendRequest("/v1/tracks/" + id, {}, cb);
-    };
+    }
 
-    sendRequest = function(link, data, cb) {
+    sendRequest(link, data, cb) {
         $.ajax({
             type: "GET",
             url: this.apiUrl + link,
@@ -39,6 +39,6 @@ class ApiRequester {
                 console.log(error);
             }
         });
-    };
+    }
 
 }
