@@ -12,7 +12,17 @@
     <script type="text/javascript">
 
         let apiRequester = new ApiRequester("https://api.spotify.com", "BQDvjM--SH-dBwO8wn3hwlO4N7tHRBQsQL1EhsiASPHP7aVTT2CuDAAyqXmZaPX_6E-qJsVZRxpZDAixtkXsbidY4ZDzpBdiQ58dMZKES8chy8ZQqmN59mp-N4_jP9Pr8sr4EEga2bOhsLeM1aq-ODmOVIs11tN6ZhnLK-P9HQ");
-        apiRequester.getArtist("Bebe");
+        apiRequester.getArtist("Bebe", function (data) {
+            console.log(data);
+        });
+
+        apiRequester.getTopTracks("64M6ah0SkkRsnPGtGiRAbb", function (data) {
+            console.log(data);
+        });
+
+        apiRequester.getSong("7iDa6hUg2VgEL1o1HjmfBn", function (data) {
+            console.log(data);
+        })
 
     </script>
 
