@@ -13,12 +13,9 @@
 
         let apiRequester = new ApiRequester("https://api.spotify.com", "BQDvjM--SH-dBwO8wn3hwlO4N7tHRBQsQL1EhsiASPHP7aVTT2CuDAAyqXmZaPX_6E-qJsVZRxpZDAixtkXsbidY4ZDzpBdiQ58dMZKES8chy8ZQqmN59mp-N4_jP9Pr8sr4EEga2bOhsLeM1aq-ODmOVIs11tN6ZhnLK-P9HQ");
         apiRequester.getArtist("Bebe");
-        apiRequester.getSong()
+        //apiRequester.getSong()
 
-        let searchstring = "";
-        document.getElementById('artistsearch').addEventListener('change',function(e){
-          searchstring = this.value;
-        })
+
     </script>
     <div class="search">
       <input type="text" id="artistsearch" class="artistsearch" placeholer="type Artist here">
@@ -37,4 +34,26 @@
 
 
 </body>
+<script type="text/javascript">
+let searchstring = "";
+let timer;
+let data;
+document.getElementById('artistsearch').addEventListener('input',function(e){
+  clearTimeout(timer);
+  timer = setTimeout(()=>{
+      console.log("change");
+      searchstring = this.value;
+      console.log(searchstring);
+      apiRequester.getArtist(searchstring,function(data){
+      this.data = data;
+      this.data.artists.items.forEach(function(item) {
+        console.log(item.name+"lol");
+        document.querySelector('body')[0].appendChild(item.name);
+      });
+
+      console.log(data.items);
+      });
+   }, 1000);
+})
+</script>
 </html>
