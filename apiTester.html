@@ -12,7 +12,7 @@
   <script type="text/javascript" src="scripts/ApiRequester.js"></script>
   <link rel="stylesheet" href="css/style.min.css">
   <script type="text/javascript">
-    let apiRequester = new ApiRequester("https://api.spotify.com", "BQDNexmPvUNnGxfYwwoVWWHQs8BZfDk0wVlY4MwRw39Iu2yV6Chh0Uxw69Ymbyg5TbMjlIiXCvk86i-JO6zA77-7pDI4xQnXHrn126fwW3520L3Vb_Y3vsRHXsovoXgRxMH43DDpGkp7yKppp6oQfYwtUqLxxEUQOg");
+    let apiRequester = new ApiRequester("https://api.spotify.com", "BQBbVQ1s1nlLGZO5gxcNi0OT6WuDDfGDYy41oimJo3ilsRpAmPS9nGxAhKXZ5UlaWYLYa6SqauUA-RIYxlBIMFsD0Qs2yErOrI9qQLFaV8o7JKwtCQ8Y69cTBoLhEu3_hWBNPQR4D6RUu9OTFCJLv2B5x-nclUxmQg");
     /*apiRequester.getArtist("Bebe", function(data) {
       //console.log(data);
     });
@@ -70,8 +70,10 @@
         console.log(item.name);
         let artist = document.createElement('a');
         artist.innerHTML = item.name;
+
         artist.addEventListener('click', ()=>{
-          //console.log(item.id);
+          document.querySelector('#artistsearch').value = item.name;
+          document.querySelector('#suggestion').innerHTML = "";
           returnSuggestion(item.id);
         });
         document.querySelector('#suggestion').append(artist);
@@ -83,7 +85,7 @@
   function returnSuggestion(artistId){
      getTopTracksData(artistId);
   }
-
+  let songs;
   function getTopTracksData(id) {
     apiRequester.getTopTracks(id, function(data) {
       let buttondiv  = document.querySelector('#chooseSong');
@@ -99,12 +101,36 @@
           console.log(data.preview_url);
         });
         songlink.innerHTML = item.name;
+        songlink.classList.add("song");
         song.append(songlink);
         song.classList.add('songbutton');
         buttondiv.append(song);
       });
+  	  songs = document.querySelectorAll('.song');
 
+      //SHITTY SCROLLING IS SHITTY
+      for(let i = 0; i<songs.length; i++){
+        if(isOverflown(songs[i])){
+          setInterval(() => {
+            let a = false;
+              if(songs[i].clientWidth+songs[i].scrollLeft>=songs[i].scrollWidth&&a==false){
+                  a = true;
+                  setTimeout(()=>{
+                    songs[i].scrollLeft = 0;
+                    a = false;
+                  }, 2000);
+              }
+              else if(a == false){
+                songs[i].scrollBy(1,0);
+              }
+          }, 25);
+        }
+      }
     });
+  }
+
+  function isOverflown(element) {
+    return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
   }
 </script>
 
