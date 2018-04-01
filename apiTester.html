@@ -10,9 +10,9 @@
 
   <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
   <script type="text/javascript" src="scripts/ApiRequester.js"></script>
-
+  <link rel="stylesheet" href="css/style.min.css">
   <script type="text/javascript">
-    let apiRequester = new ApiRequester("https://api.spotify.com", "BQCn4353eromGh9ViND4vK2P4ni9tykNqJkTyXFzTxRS2tQdZTX0nKNqVNsyCMhktDJUVte2OCVoBeZyQayvlzNJANgO7G4_BO79IcuRsvBD7Dgzr8Zn66HSvyz0KpemSmcT2mN0nwyWSUDzeAWdQveLJVwaaOzTyA2akviKVg");
+    let apiRequester = new ApiRequester("https://api.spotify.com", "BQDNexmPvUNnGxfYwwoVWWHQs8BZfDk0wVlY4MwRw39Iu2yV6Chh0Uxw69Ymbyg5TbMjlIiXCvk86i-JO6zA77-7pDI4xQnXHrn126fwW3520L3Vb_Y3vsRHXsovoXgRxMH43DDpGkp7yKppp6oQfYwtUqLxxEUQOg");
     /*apiRequester.getArtist("Bebe", function(data) {
       //console.log(data);
     });
@@ -26,11 +26,17 @@
     })
     */
   </script>
+  <header>
+    <h1>Fancy Headline</h1>
+    <p class="desc">Finde heraus welche Songs am besten zu dir passen. Suche jetzt nach einem Künstler um die verschiedensten Eigenschaften der Musik vergleichen zu können.</p>
   <div class="search">
-    <input type="text" id="artistsearch" class="artistsearch" placeholer="type Artist here">
-
+    <input type="text" id="artistsearch" class="artistsearch" placeholder="type Artist here">
+    <div id="suggestion"></div>
   </div>
+  </header>
 
+  <div id="chooseSong">
+  </div>
   <div class="preview">
     <video id="audio" controls="" name="media">
       <source id="preview_source" src="" type="audio/mpeg">
@@ -59,23 +65,45 @@
     searchstring = val;
     apiRequester.getArtist(searchstring, function(data) {
       this.data = data;
-      let artist;
+      document.querySelector('#suggestion').innerHTML="";
       this.data.artists.items.forEach(function(item) {
         console.log(item.name);
-        document.body.append(item.name + "\n");
-
+        let artist = document.createElement('a');
+        artist.innerHTML = item.name;
+        artist.addEventListener('click', ()=>{
+          //console.log(item.id);
+          returnSuggestion(item.id);
+        });
+        document.querySelector('#suggestion').append(artist);
       });
-      artist = this.data.artists.items[0].id;
-      getTopTracksData(artist)
+    //  artist = this.data.artists.items[0].id;
+
     });
+  }
+  function returnSuggestion(artistId){
+     getTopTracksData(artistId);
   }
 
   function getTopTracksData(id) {
     apiRequester.getTopTracks(id, function(data) {
-      document.querySelector('#preview_source').src = data.preview_url;
-      let audio = document.querySelector('#audio');
-      audio.load();
-      console.log(data.preview_url);
+      let buttondiv  = document.querySelector('#chooseSong');
+      buttondiv.innerHTML = "";
+      data.forEach(function(item, i) {
+        let song = document.createElement('div');
+        let songlink = document.createElement('a');
+        songlink.addEventListener('click', ()=>{
+          document.querySelector('#preview_source').style.display = "flex";
+          document.querySelector('#preview_source').src = data[i].preview_url;
+          let audio = document.querySelector('#audio');
+          audio.load();
+          console.log(data.preview_url);
+        });
+        songlink.innerHTML = item.name;
+        song.append(songlink);
+        song.classList.add('songbutton');
+        buttondiv.append(song);
+      });
+
     });
   }
 </script>

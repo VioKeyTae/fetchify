@@ -16,7 +16,7 @@ class ApiRequester {
         this.sendRequest("/v1/artists/" + artistId + "/top-tracks", {
             country: "AT"
         }, function (data) {
-            cb(data.tracks[0]);
+            cb(data.tracks); //cb(data.tracks[0]);
         });
     }
 
