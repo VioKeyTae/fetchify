@@ -20,8 +20,12 @@ class ApiRequester {
         });
     }
 
-    getSongData(id, cb) {
-        this.sendRequest("/audio-features/" + id, {}, cb);
+    getSongData(ids, cb) {
+        this.sendRequest("/v1/audio-features/", {
+            ids: ids
+        }, function (data) {
+            cb(data.audio_features);
+        });
     }
 
     sendRequest(link, data, cb) {
