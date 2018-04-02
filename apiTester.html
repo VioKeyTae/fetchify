@@ -12,7 +12,7 @@
   <script type="text/javascript" src="scripts/ApiRequester.js"></script>
   <link rel="stylesheet" href="css/style.min.css">
   <script type="text/javascript">
-    let apiRequester = new ApiRequester("https://api.spotify.com", "BQBtX5zwV37u-ZedUd_19S6z7TPGbb5SdWVNIFvkf7jPa9yWVH49FIsxKH2brNs1R6ELIiUsj2UZ9suxoFOP3O22T8BtWak5sWsP-jdVLcD3bLfYh0d1Y4e-vwoDwV1VGTpBhcKXTbqcfaLlax3HrgnPULPXZ_mmEg");
+    let apiRequester = new ApiRequester("https://api.spotify.com", "BQB2W1wuWSYQVIL_OEeeXT9bTzrToLlji5enuk-GOPpNIXC3anHmReuZFjrJYagNKt25vpjKMKHdUPNDXuG6XVB5cYdS--k6G71aMdoeBoag7bGddexe0ZcvrgtQOUMZ1SBSrZTt-lkTnTSF7PNHoWISLa_qwVSvZw");
     /*apiRequester.getArtist("Bebe", function(data) {
       //console.log(data);
     });
@@ -27,8 +27,10 @@
     */
   </script>
   <header>
+    <div id="left">
     <h1>Fancy Headline</h1>
     <p class="desc">Finde heraus welche Songs am besten zu dir passen. Suche jetzt nach einem Künstler um die verschiedensten Eigenschaften der Musik vergleichen zu können.</p>
+    </div>
   <div class="search">
     <input type="text" id="artistsearch" class="artistsearch" placeholder="type Artist here">
     <div id="suggestion"></div>
@@ -37,14 +39,17 @@
 
   <div id="chooseSong">
   </div>
+  <div id="bottomwrapper">
   <div class="preview">
-    <video id="audio" controls="" name="media">
+    <div id="albumart"></div>
+    <audio id="audio" controls="" name="media">
       <source id="preview_source" src="" type="audio/mpeg">
-    </video>
+    </audio>
   </div>
   <div class="data">
-    DATASTUFF
+    <div id="datawrapper"></div>
   </div>
+</div>
 
 
 
@@ -53,6 +58,14 @@
   let searchstring = "";
   let timer;
   let data;
+  /*var datalist= [
+    {"id":"ABC","order":1,"score":60,"weight":1,"color":"#6ef442","label": "Danciness"},
+    {"id":"CDE","order":2,"score":40,"weight": 1,"color":"#fc92fc", "label": "Happiness"},
+    {"id":"EFG","order":2,"score":90,"weight": 1,"color":"#9094f9", "label": "Loudiness"},
+    {"id":"EFG","order":2,"score":96,"weight": 1,"color":"#8ff2f7", "label": "Loch Ness"},
+    {"id":"EFG","order":2,"score":50,"weight": 1,"color":"#fc5f81", "label": "Accousticness"}
+  ];*/
+  var datalist = [];
 
   document.getElementById('artistsearch').addEventListener('input', function(e) {
     clearTimeout(timer);
@@ -70,7 +83,6 @@
         console.log(item.name);
         let artist = document.createElement('a');
         artist.innerHTML = item.name;
-
         artist.addEventListener('click', ()=>{
           document.querySelector('#artistsearch').value = item.name;
           document.querySelector('#suggestion').innerHTML = "";
@@ -112,13 +124,17 @@
         let song = document.createElement('div');
         let songlink = document.createElement('a');
         songlink.addEventListener('click', ()=>{
+          console.log(data[i]);
+          document.querySelector("#albumart").style.backgroundImage = "url('"+data[i].album.images[0].url+"')";
+          document.querySelector("#albumart").style.display ="block";
           document.querySelector('#preview_source').style.display = "flex";
+          document.querySelector("#albumart").style.opacity =1;
           document.querySelector('#preview_source').src = data[i].preview_url;
           let audio = document.querySelector('#audio');
           audio.load();
-          console.log(data);
-          apiRequester.getSongData("26gceVsA1ybT8qsX3aYLEn", function(info) {
-            console.log(info);
+          audio.style.display = "block";
+          apiRequester.getSongData(data[i].id, function(info) {
+            datastuff(info);
           })
         });
         songlink.addEventListener('mouseover', function(e){
@@ -136,6 +152,21 @@
 
     });
   }
+  let stuff;
+  function datastuff(stuff){
+    stuff = stuff[0];
+      datalist=[];
+      datalist.push({"id":"acousticness","order":1,"score":stuff.acousticness*100,"weight":1,"color":"#4286f4","label": "acousticness"});
+      datalist.push({"id":"danceability","order":1,"score":stuff.danceability*100,"weight":1,"color":"#f243e9","label": "danceability"});
+      datalist.push({"id":"energy","order":1,"score":stuff.energy*100,"weight":1,"color":"#ede440","label": "energy"});
+      datalist.push({"id":"instrumentalness","order":1,"score":stuff.instrumentalness*100,"weight":1,"color":"#38d15e","label": "instrumentalness"});
+      datalist.push({"id":"liveness","order":1,"score":stuff.liveness*100,"weight":1,"color":"#efbb43","label": "liveness"});
+      datalist.push({"id":"speechiness","order":1,"score":stuff.speechiness*100,"weight":1,"color":"#59f1f9","label": "speechiness"});
+      //datalist.push({"id":"loudness","order":1,"score":stuff.loudness*100,"weight":1,"color":"#6ef442","label": "loudness"});
+      document.querySelector("#datawrapper").innerHTML = "";
+      draw();
+  }
+
 
   function isOverflown(element) {
     return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
