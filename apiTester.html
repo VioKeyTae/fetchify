@@ -12,7 +12,7 @@
   <script type="text/javascript" src="scripts/ApiRequester.js"></script>
   <link rel="stylesheet" href="css/style.min.css">
   <script type="text/javascript">
-    let apiRequester = new ApiRequester("https://api.spotify.com", "BQBbVQ1s1nlLGZO5gxcNi0OT6WuDDfGDYy41oimJo3ilsRpAmPS9nGxAhKXZ5UlaWYLYa6SqauUA-RIYxlBIMFsD0Qs2yErOrI9qQLFaV8o7JKwtCQ8Y69cTBoLhEu3_hWBNPQR4D6RUu9OTFCJLv2B5x-nclUxmQg");
+    let apiRequester = new ApiRequester("https://api.spotify.com", "BQBtX5zwV37u-ZedUd_19S6z7TPGbb5SdWVNIFvkf7jPa9yWVH49FIsxKH2brNs1R6ELIiUsj2UZ9suxoFOP3O22T8BtWak5sWsP-jdVLcD3bLfYh0d1Y4e-vwoDwV1VGTpBhcKXTbqcfaLlax3HrgnPULPXZ_mmEg");
     /*apiRequester.getArtist("Bebe", function(data) {
       //console.log(data);
     });
@@ -86,6 +86,24 @@
      getTopTracksData(artistId);
   }
   let songs;
+  let int;
+  function scroll(target){
+      if(isOverflown(target)){
+        int = setInterval(() => {
+            if(target.clientWidth+target.scrollLeft>=target.scrollWidth){
+              target.scrollLeft = 0;
+              clear();
+            }
+            else{
+              target.scrollBy(1.5,0);
+            }
+        }, 40);
+      }
+  }
+  function clear(){
+     clearInterval(int);
+  }
+
   function getTopTracksData(id) {
     apiRequester.getTopTracks(id, function(data) {
       let buttondiv  = document.querySelector('#chooseSong');
@@ -98,7 +116,16 @@
           document.querySelector('#preview_source').src = data[i].preview_url;
           let audio = document.querySelector('#audio');
           audio.load();
-          console.log(data.preview_url);
+          console.log(data);
+          apiRequester.getSongData("26gceVsA1ybT8qsX3aYLEn", function(info) {
+            console.log(info);
+          })
+        });
+        songlink.addEventListener('mouseover', function(e){
+          scroll(e.target);
+        });
+        songlink.addEventListener('mouseout', function(){
+          clear();
         });
         songlink.innerHTML = item.name;
         songlink.classList.add("song");
@@ -106,26 +133,7 @@
         song.classList.add('songbutton');
         buttondiv.append(song);
       });
-  	  songs = document.querySelectorAll('.song');
 
-      //SHITTY SCROLLING IS SHITTY
-      for(let i = 0; i<songs.length; i++){
-        if(isOverflown(songs[i])){
-          setInterval(() => {
-            let a = false;
-              if(songs[i].clientWidth+songs[i].scrollLeft>=songs[i].scrollWidth&&a==false){
-                  a = true;
-                  setTimeout(()=>{
-                    songs[i].scrollLeft = 0;
-                    a = false;
-                  }, 2000);
-              }
-              else if(a == false){
-                songs[i].scrollBy(1,0);
-              }
-          }, 25);
-        }
-      }
     });
   }
 

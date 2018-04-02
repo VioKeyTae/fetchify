@@ -1,6 +1,6 @@
 $grad-end: 70%;
 $grad-dir: bottom left;
-$box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+$box-shadow: 0 7px 14px rgba(0,0,0,0.25), 0 5px 5px rgba(0,0,0,0.22);
 @import url('https://fonts.googleapis.com/css?family=Ubuntu:300,400');
 
 * {
@@ -132,16 +132,22 @@ header {
     flex-grow: 1;
     a{
       width:20ch;
-      max-width: 100%;
+      max-width: 30ch;
       white-space: nowrap;
       overflow:hidden;
       text-align: center;
-      padding:0.5rem 1.5rem;
+      padding:0.7rem 1.5rem;
       border-radius: 10px;
       @include box-shadow();
-      background-color: var(--secColor);
+      filter: brightness(110%);
       color:white;
+      background-color: #8ab6fc;
       cursor: pointer;
+      transition: transform 0.1s, background-color 0.1s;
+    }
+    a:hover{
+      transform: translateY(-3px);
+      filter: brightness(120%);
     }
   }
 }
