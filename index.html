@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ApiTester</title>
+    <link rel="stylesheet" href="css/gierlaStyle.css">
+</head>
+
+<body>
+    <header>
+        <div class="headerBar">
+            <div class="headerText">SpotifyAnalyzer</div>
+        </div>
+    </header>
+    <div class="sectionContainer">
+        <section class="selector">
+            <input class="searchArtist" type="text" title="Search" placeholder="Search Artist">
+            <div class="scrollContainer">
+                <div class="itemContainer"></div>
+            </div>
+        </section>
+        <section class="display">
+            <div class="data">
+                <div id="datawrapper"></div>
+            </div>
+        </section>
+    </div>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+    <script src="scripts/draw.js"></script>
+    <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="scripts/ApiRequester.js"></script>
+    <script type="text/javascript">
+        let apiRequester = new ApiRequester("https://api.spotify.com", "BQBlMFMqy1DYGwP8pk-WhAiX5DfGhsQBBUHuFC646Fec8ukzB6CBUyAC5XjE4qvjpznt36V8oD9kijNJpd_hLg7GDf-qxGkjg6m3gR6GDhgsZ6NiULL8Ce7q3je9dyXIf4uEq7gylJ0c3LhOdHxr5BtJRhRF73lEeDwTYqqZPQ");
+
+        let inputTime = 0;
+
+        let inputField = $(".searchArtist");
+        inputField.on('input', function () {
+            clearTimeout(inputTime);
+            inputTime = setTimeout(function () {
+                loadArtists(inputField.val());
+            }, 2000);
+        });
+
+        let itemContainer = $(".itemContainer");
+
+        function loadArtists(text) {
+            apiRequester.getArtist(text, function (result) {
+                itemContainer.empty();
+                result.artists.items.forEach(function (artist) {
+                    let container = $("<div class='searchItem'></div>");
+                    container.text(artist.name);
+                    container.on('click', function () {
+                        inputField.val(artist.name);
+                        loadSongs(artist);
+                    });
+                    itemContainer.append(container)
+                });
+            })
+        }
+
+        function loadSongs(artist) {
+            apiRequester.getTopTracks(artist.id, function (songs) {
+                itemContainer.empty();
+                songs.forEach(function (song) {
+                    let container = $("<div class='searchItem'></div>");
+                    container.text(song.name);
+                    container.on('click', function () {
+                        loadSong(song);
+                    });
+                    itemContainer.append(container)
+                })
+            })
+        }
+
+        function loadSong(song) {
+            apiRequester.getSongData(song.id, function (info) {
+                console.log(info);
+                datastuff(info[0]);
+            })
+        }
+
+        function datastuff(stuff) {
+            datalist = [];
+            datalist.push({
+                "id": "acousticness",
+                "order": 1,
+                "score": stuff.acousticness * 100,
+                "weight": 1,
+                "color": "#4286f4",
+                "label": "acousticness"
+            });
+            datalist.push({
+                "id": "danceability",
+                "order": 1,
+                "score": stuff.danceability * 100,
+                "weight": 1,
+                "color": "#f243e9",
+                "label": "danceability"
+            });
+            datalist.push({
+                "id": "energy",
+                "order": 1,
+                "score": stuff.energy * 100,
+                "weight": 1,
+                "color": "#ede440",
+                "label": "energy"
+            });
+            datalist.push({
+                "id": "instrumentalness",
+                "order": 1,
+                "score": stuff.instrumentalness * 100,
+                "weight": 1,
+                "color": "#38d15e",
+                "label": "instrumentalness"
+            });
+            datalist.push({
+                "id": "liveness",
+                "order": 1,
+                "score": stuff.liveness * 100,
+                "weight": 1,
+                "color": "#efbb43",
+                "label": "liveness"
+            });
+            datalist.push({
+                "id": "speechiness",
+                "order": 1,
+                "score": stuff.speechiness * 100,
+                "weight": 1,
+                "color": "#59f1f9",
+                "label": "speechiness"
+            });
+            //datalist.push({"id":"loudness","order":1,"score":stuff.loudness*100,"weight":1,"color":"#6ef442","label": "loudness"});
+            document.querySelector("#datawrapper").innerHTML = "";
+            draw();
+        }
+
+    </script>
+</body>
+</html>
