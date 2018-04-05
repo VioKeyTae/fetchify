@@ -1,6 +1,6 @@
 function draw() {
-    var width = 500,
-        height = 500,
+    var width = 300,
+        height = 300,
         radius = Math.min(width, height) / 2,
         innerRadius = 0.3 * radius;
 
@@ -30,6 +30,8 @@ function draw() {
     var svg = d3.select("#datawrapper").append("svg")
         .attr("width", width)
         .attr("height", height)
+        .attr("id", 'svg')
+        .attr("viewBox", "0 0 300 300")
         .append("g")
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 

@@ -12,7 +12,7 @@
   <script type="text/javascript" src="scripts/ApiRequester.js"></script>
   <link rel="stylesheet" href="css/style.min.css">
   <script type="text/javascript">
-    let apiRequester = new ApiRequester("https://api.spotify.com", "BQB2W1wuWSYQVIL_OEeeXT9bTzrToLlji5enuk-GOPpNIXC3anHmReuZFjrJYagNKt25vpjKMKHdUPNDXuG6XVB5cYdS--k6G71aMdoeBoag7bGddexe0ZcvrgtQOUMZ1SBSrZTt-lkTnTSF7PNHoWISLa_qwVSvZw");
+    let apiRequester = new ApiRequester("https://api.spotify.com", "BQAwDsOPoozAhj5-LM7rDNNR4YGa76QMYNmDd1P4_5kyVWeM7PtcBhbflq7mstAXDUHH24EhW168QDzdBanlsZFN5axX0BlBOxUCzU9gz0A_0pbTYO3sSHsuwDaViMtNnnJfZlb-VtDmVibgiiMO8wUbGNa42ijqaylXB0RQTg");
     /*apiRequester.getArtist("Bebe", function(data) {
       //console.log(data);
     });
@@ -47,7 +47,9 @@
     </audio>
   </div>
   <div class="data">
-    <div id="datawrapper"></div>
+    <div id="datawrapper">
+    </div>
+    <div id="bar"></div>
   </div>
 </div>
 
@@ -127,11 +129,14 @@
           console.log(data[i]);
           document.querySelector("#albumart").style.backgroundImage = "url('"+data[i].album.images[0].url+"')";
           document.querySelector("#albumart").style.display ="block";
+          document.querySelectorAll('.data')[0].style.display ="flex";
           document.querySelector('#preview_source').style.display = "flex";
           document.querySelector("#albumart").style.opacity =1;
           document.querySelector('#preview_source').src = data[i].preview_url;
           let audio = document.querySelector('#audio');
+          audio.crossOrigin = "anonymous";
           audio.load();
+          addAudioStuff(audio);
           audio.style.display = "block";
           apiRequester.getSongData(data[i].id, function(info) {
             datastuff(info);
@@ -165,6 +170,9 @@
       //datalist.push({"id":"loudness","order":1,"score":stuff.loudness*100,"weight":1,"color":"#6ef442","label": "loudness"});
       document.querySelector("#datawrapper").innerHTML = "";
       draw();
+
+      	initialiseData();
+      	update(myData);
   }
 
 
@@ -175,7 +183,9 @@
 
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
-
+<script src="scripts/amplitude.js" ></script>
 <script src="scripts/draw.js" ></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.2/d3.min.js"></script>
+<script src="scripts/bar.js" ></script>
 
 </html>
