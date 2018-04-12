@@ -21,18 +21,23 @@
             </div>
         </section>
         <section class="display">
-            <div class="data">
+            <div class="data" id="dataContainer">
+                <div class="categoryContainer">
+                    <div class="category">danceability</div>
+                    <div class="category">energy</div>
+                    <div class="category">acousticness</div>
+                </div>
                 <div id="datawrapper"></div>
             </div>
         </section>
     </div>
-    <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
-    <script src="scripts/draw.js"></script>
+    <script src="http://d3js.org/d3.v4.min.js"></script>
     <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="node_modules/d3-tip/index.js"></script>
     <script type="text/javascript" src="scripts/ApiRequester.js"></script>
+    <script type="text/javascript" src="scripts/drawGierla.js"></script>
     <script type="text/javascript">
-        let apiRequester = new ApiRequester("https://api.spotify.com", "BQBlMFMqy1DYGwP8pk-WhAiX5DfGhsQBBUHuFC646Fec8ukzB6CBUyAC5XjE4qvjpznt36V8oD9kijNJpd_hLg7GDf-qxGkjg6m3gR6GDhgsZ6NiULL8Ce7q3je9dyXIf4uEq7gylJ0c3LhOdHxr5BtJRhRF73lEeDwTYqqZPQ");
+        let apiRequester = new ApiRequester("https://api.spotify.com", "BQBKQy8tFvJM6j3VWhkCrhGz3bh43_x3ekGZz_4HTczOoln7OeLAASp3E-0IZEWWiqhxJrevC4nLtL-s_7u2zqQqSDzQGNS5rf7m7f71X1dj93Y6ojOfnSPlonTvCQ444D7lBL2y5UFpZNuVm8tUn1edGfa3MVwF0GQmbUuaNw");
 
         let inputTime = 0;
 
@@ -41,7 +46,7 @@
             clearTimeout(inputTime);
             inputTime = setTimeout(function () {
                 loadArtists(inputField.val());
-            }, 2000);
+            }, 1000);
         });
 
         let itemContainer = $(".itemContainer");
@@ -61,80 +66,52 @@
             })
         }
 
+        let currentData = null;
+        let keyWord = "danceability";
+
         function loadSongs(artist) {
             apiRequester.getTopTracks(artist.id, function (songs) {
-                itemContainer.empty();
+                let queryString = "";
                 songs.forEach(function (song) {
-                    let container = $("<div class='searchItem'></div>");
-                    container.text(song.name);
-                    container.on('click', function () {
-                        loadSong(song);
+                    queryString += song.id + ","
+                });
+                apiRequester.getSongData(queryString, function (data) {
+                    data.forEach(function (currentData) {
+                        let currentSong = songs.find(function (song) {
+                            return song.id == currentData.id
+                        });
+                        currentData["name"] = currentSong.name;
                     });
-                    itemContainer.append(container)
+                    currentData = data;
+                    loadData(data);
                 })
             })
         }
 
-        function loadSong(song) {
-            apiRequester.getSongData(song.id, function (info) {
-                console.log(info);
-                datastuff(info[0]);
-            })
-        }
+        $(".category").stop().click(function (e) {
+            keyWord = $(e.target).text();
+            if (currentData != null) {
+                loadData(currentData);
+            }
+        });
 
-        function datastuff(stuff) {
-            datalist = [];
-            datalist.push({
-                "id": "acousticness",
-                "order": 1,
-                "score": stuff.acousticness * 100,
-                "weight": 1,
-                "color": "#4286f4",
-                "label": "acousticness"
+        function loadData(songData) {
+            let datalist = [];
+            songData.forEach(function (song) {
+                datalist.push({
+                    "id": song.id,
+                    "score": song[keyWord],
+                    "tempo": song["tempo"],
+                    "label": song.name
+                });
             });
-            datalist.push({
-                "id": "danceability",
-                "order": 1,
-                "score": stuff.danceability * 100,
-                "weight": 1,
-                "color": "#f243e9",
-                "label": "danceability"
-            });
-            datalist.push({
-                "id": "energy",
-                "order": 1,
-                "score": stuff.energy * 100,
-                "weight": 1,
-                "color": "#ede440",
-                "label": "energy"
-            });
-            datalist.push({
-                "id": "instrumentalness",
-                "order": 1,
-                "score": stuff.instrumentalness * 100,
-                "weight": 1,
-                "color": "#38d15e",
-                "label": "instrumentalness"
-            });
-            datalist.push({
-                "id": "liveness",
-                "order": 1,
-                "score": stuff.liveness * 100,
-                "weight": 1,
-                "color": "#efbb43",
-                "label": "liveness"
-            });
-            datalist.push({
-                "id": "speechiness",
-                "order": 1,
-                "score": stuff.speechiness * 100,
-                "weight": 1,
-                "color": "#59f1f9",
-                "label": "speechiness"
-            });
-            //datalist.push({"id":"loudness","order":1,"score":stuff.loudness*100,"weight":1,"color":"#6ef442","label": "loudness"});
-            document.querySelector("#datawrapper").innerHTML = "";
-            draw();
+            $("#datawrapper").empty();
+
+            let container = $("#dataContainer");
+            let width = container.width() * 0.80;
+            let height = container.height() * 0.75;
+
+            drawChart(datalist, width, height, keyWord);
         }
 
     </script>
