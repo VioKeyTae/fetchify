@@ -12,7 +12,7 @@
   <script type="text/javascript" src="scripts/ApiRequester.js"></script>
   <link rel="stylesheet" href="css/style.min.css">
   <script type="text/javascript">
-    let apiRequester = new ApiRequester("https://api.spotify.com", "BQAwDsOPoozAhj5-LM7rDNNR4YGa76QMYNmDd1P4_5kyVWeM7PtcBhbflq7mstAXDUHH24EhW168QDzdBanlsZFN5axX0BlBOxUCzU9gz0A_0pbTYO3sSHsuwDaViMtNnnJfZlb-VtDmVibgiiMO8wUbGNa42ijqaylXB0RQTg");
+    let apiRequester = new ApiRequester("https://api.spotify.com", "BQArF4-uXWW8NXe-oeUM2dki0RGqU-9f9g8lqBfG5tb5uT8mCMLuYtt9aGibGINjRahAZ-r-GK05fYjnpNRAKlzfgfyea9LobcwpQpjSX_dExlFP0TZUGSPUIyK8UWI9d-HFHW484w-eu2xyqzYDvNv_c94DUYJB-SLjGj69oQ");
     /*apiRequester.getArtist("Bebe", function(data) {
       //console.log(data);
     });
@@ -46,10 +46,14 @@
       <source id="preview_source" src="" type="audio/mpeg">
     </audio>
   </div>
+  <div class="buttondiv">
+    <a id="switchbarpie" class="button">Bar Chart</a>
+  </div>
   <div class="data">
-    <div id="datawrapper">
+    <div id="datawrapper" class="datawrapper">
+
     </div>
-    <div id="bar"></div>
+<div id="barcon" class="datawrapper"></div>
   </div>
 </div>
 
@@ -117,7 +121,7 @@
   function clear(){
      clearInterval(int);
   }
-
+  let switcher = true;
   function getTopTracksData(id) {
     apiRequester.getTopTracks(id, function(data) {
       let buttondiv  = document.querySelector('#chooseSong');
@@ -129,6 +133,21 @@
           console.log(data[i]);
           document.querySelector("#albumart").style.backgroundImage = "url('"+data[i].album.images[0].url+"')";
           document.querySelector("#albumart").style.display ="block";
+          document.querySelector("#switchbarpie").style.display ="block";
+          document.querySelector('#switchbarpie').addEventListener('click', function(){
+            if(switcher){
+              document.querySelector('#barcon').style.display = "flex";
+              document.querySelector('#datawrapper').style.display = "none";
+              document.querySelector('#switchbarpie').innerhtml = "Pie Chart";
+              switcher = false;
+            }
+            else{
+              document.querySelector('#barcon').style.display = "none";
+              document.querySelector('#datawrapper').style.display = "block";
+              document.querySelector('#switchbarpie').innerhtml = "Bar Chart";
+              switcher = true;
+            }
+          })
           document.querySelectorAll('.data')[0].style.display ="flex";
           document.querySelector('#preview_source').style.display = "flex";
           document.querySelector("#albumart").style.opacity =1;
@@ -179,6 +198,8 @@
   function isOverflown(element) {
     return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
   }
+
+
 </script>
 
 <script src="http://d3js.org/d3.v3.min.js"></script>

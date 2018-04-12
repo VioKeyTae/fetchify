@@ -136,7 +136,7 @@ header {
   margin-bottom:10rem;
 }
 .preview{
-  flex-basis:45%;
+  flex-basis:40%;
   display:flex;
   flex-direction: column;
   align-items: center;
@@ -159,19 +159,22 @@ header {
   }
 }
 .data{
-  flex-basis:45%;
+  flex-basis:40%;
   display:flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   display:none;
-  #datawrapper{
+  .datawrapper{
     width:25rem;
     height:25rem;
     margin:1rem;
     border-radius: 10px;
+    padding:1rem;
     @include box-shadow();
     display:flex;
+  }
+  #datawrapper{
     align-items: center;
     justify-content: center;
   }
@@ -181,7 +184,7 @@ header {
     transition: all 0.1s;
     transform-origin: 50% 50%;
   }
-  .bar{
+  #barcon{
     width:25rem;
     height:25rem;
     margin:1rem;
@@ -223,34 +226,54 @@ header {
   }
 }
 
+.buttondiv{
+  flex-basis:10%;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  .button{
+    white-space: nowrap;
+    overflow:hidden;
+    text-align: center;
+    padding:0.7rem 1.5rem;
+    border-radius: 10px;
+    @include box-shadow();
+    color:white;
+    background-color: #8ab6fc;
+    cursor: pointer;
+    transition: transform 0.1s, background-color 0.1s;
+    display:none;
+  }
+  .button:hover{
+    transform: translateY(-3px);
+    filter: brightness(120%);
+  }
+}
 
 
 
 
 
 
-
-
+#barcon{
+  display:none;
+  flex-direction: column;
+  justify-content: center;
+}
 .person {
-		height: 20px;
-		position: relative;
+  display:flex;
+	height: 20px;
+  padding: 1rem 0;
 	}
 	.person .label {
-		width: 90px;
-		text-align: right;
+    flex-basis:30%;
+    min-width:16ch;
+    flex-shrink: 0;
+		text-align: left;
 	}
 	.person .bar {
-		height: 19px;
+		height: 20px;
 		background-color: steelblue;
-		position: absolute;
-		left: 100px;
 	}
 	.person div {
-		display: inline-block;
-	}
-	.data-view {
-		padding: 10px;
-		color: #777;
-		font-size: 12px;
-		width: 700px;
 	}

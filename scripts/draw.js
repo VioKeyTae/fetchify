@@ -2,7 +2,7 @@ function draw() {
     var width = 300,
         height = 300,
         radius = Math.min(width, height) / 2,
-        innerRadius = 0.3 * radius;
+        innerRadius = 0.6 * radius;
 
     var pie = d3.layout.pie()
         .sort(null)
@@ -14,8 +14,12 @@ function draw() {
         .attr('class', 'd3-tip')
         .offset([0, 0])
         .html(function (d) {
-            return d.data.label + ": <span style='color:orangered'>" + d.data.score + "</span>";
+            return d.data.label + ":<span>" + d.data.score + "</span>";
         });
+
+    var outlineArc = d3.svg.arc()
+        .innerRadius(innerRadius)
+        .outerRadius(radius);
 
     var arc = d3.svg.arc()
         .innerRadius(innerRadius)
@@ -23,9 +27,7 @@ function draw() {
             return (radius - innerRadius) * (d.data.score / 100.0) + innerRadius;
         });
 
-    var outlineArc = d3.svg.arc()
-        .innerRadius(innerRadius)
-        .outerRadius(radius);
+
 
     var svg = d3.select("#datawrapper").append("svg")
         .attr("width", width)
@@ -47,6 +49,16 @@ function draw() {
         d.label = d.label;
     });
     // for (var i = 0; i < datalist.score; i++) { console.log(datalist[i].id) }
+    var outerPath = svg.selectAll(".outlineArc")
+        .data(pie(datalist))
+        .enter().append("path")
+        .attr("fill", "red")
+        .attr("fill-opacity", "0")
+        .attr("stroke", "#333")
+        .attr("class", "outlineArc")
+        .attr("d", outlineArc)
+        .on('mouseover', tip.show)
+        .on('mouseout', tip.hide);
 
     var path = svg.selectAll(".solidArc")
         .data(pie(datalist))
@@ -55,18 +67,12 @@ function draw() {
             return d.data.color;
         })
         .attr("class", "solidArc")
-        .attr("stroke", "gray")
+        .attr("stroke", "#333")
         .attr("d", arc)
         .on('mouseover', tip.show)
         .on('mouseout', tip.hide);
 
-    var outerPath = svg.selectAll(".outlineArc")
-        .data(pie(datalist))
-        .enter().append("path")
-        .attr("fill", "none")
-        .attr("stroke", "gray")
-        .attr("class", "outlineArc")
-        .attr("d", outlineArc);
+
 
 
     // calculate the weighted mean score
@@ -79,9 +85,9 @@ function draw() {
             return a + b.weight;
         }, 0);
 
-    svg.append("svg:text")
+    /*svg.append("svg:text")
         .attr("class", "aster-score")
         .attr("dy", ".35em")
         .attr("text-anchor", "middle") // text-align: right
-        .text(Math.round(score));
+        .text(Math.round(score));*/
 }

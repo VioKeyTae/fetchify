@@ -15,7 +15,7 @@
 
 	function updateBars(data) {
     console.log(data);
-		var u = d3.select('#bar')
+		var u = d3.select('#barcon')
 			.selectAll('.person')
 			.data(data, function(d) {
 				return d.label;

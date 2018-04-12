@@ -44,12 +44,13 @@ function processAudio(e) {
 */
 let node, processor;
 function addAudioStuff(audio){
-    audio.addEventListener('canplaythrough',function() {
-    node = context.createMediaElementSource(audio);
-    processor = context.createScriptProcessor(2048, 1, 1);
-    processor.onaudioprocess = processAudio;
-    node.connect(processor);
-    processor.connect(context.destination);
-    audio.play();
-  });
+      audio.addEventListener('play',function() {
+        node = context.createMediaElementSource(audio);
+        processor = context.createScriptProcessor(2048, 1, 1);
+        processor.onaudioprocess = processAudio;
+        node.connect(processor);
+        processor.connect(context.destination);
+        audio.play();
+      });
+
 }
