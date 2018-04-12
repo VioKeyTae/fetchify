@@ -14,7 +14,9 @@ function draw() {
         .attr('class', 'd3-tip')
         .offset([0, 0])
         .html(function (d) {
-            return d.data.label + ":<span>" + d.data.score + "</span>";
+          document.querySelector('#stuff').innerHTML = "";
+          document.querySelector('#stuff').innerHTML = "<span>" + d.data.label +" : "+ parseInt(d.data.score) + "</span>";
+          //  return d.data.label + ":<span>" + d.data.score + "</span>";
         });
 
     var outlineArc = d3.svg.arc()

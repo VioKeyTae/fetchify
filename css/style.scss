@@ -230,7 +230,9 @@ header {
   flex-basis:10%;
   display:flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
+  display:flex;
+  flex-direction: column;
   .button{
     white-space: nowrap;
     overflow:hidden;
@@ -243,6 +245,7 @@ header {
     cursor: pointer;
     transition: transform 0.1s, background-color 0.1s;
     display:none;
+
   }
   .button:hover{
     transform: translateY(-3px);
